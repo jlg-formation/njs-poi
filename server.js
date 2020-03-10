@@ -1,5 +1,6 @@
 const express = require('express');
 const serveIndex = require('serve-index');
+const ws = require('./ws');
 const app = express();
 
 app.use(function (req, res, next) {
@@ -8,9 +9,7 @@ app.use(function (req, res, next) {
 });
 
 
-app.get('/ws/now', function (req, res, next) {
-    res.json({ date: new Date() });
-});
+app.use('/ws', ws);
 
 const publicDir = './www';
 app.use(express.static(publicDir));
