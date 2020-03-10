@@ -7,6 +7,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+
+app.get('/ws/now', function (req, res, next) {
+    res.json({ date: new Date() });
+});
+
 const publicDir = './www';
 app.use(express.static(publicDir));
 app.use(serveIndex(publicDir, { icons: true }));
