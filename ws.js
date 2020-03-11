@@ -18,6 +18,8 @@ console.log('init...');
 const app = express.Router();
 module.exports = app;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/now', function (req, res, next) {
     res.json({ date: new Date() });
@@ -29,6 +31,25 @@ app.get('/user', async function (req, res, next) {
         return;
     }
     const collection = db.collection('user');
-    const users = await collection.find({lastname: /^G/}).toArray();
+    const users = await collection.find({ lastname: /^G/ }).toArray();
     res.json(users);
+});
+
+app.post('/user', async function (req, res, next) {
+    if (!db) {
+        res.status(500).end();
+        return;
+    }
+    try {
+        const user = req.body;
+        console.log('user: ', user);
+
+        const collection = db.collection('user');
+        const result = await collection.insertOne(user);
+        res.status(201).json(result.ops[0]);
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+
 });
