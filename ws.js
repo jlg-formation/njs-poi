@@ -5,6 +5,7 @@ let db;
 async function start() {
     try {
         const client = await mongodb.connect('mongodb://localhost', { useUnifiedTopology: true });
+        console.log('connected.');
         db = client.db('orsys');
     } catch (error) {
         db = undefined;
@@ -13,7 +14,7 @@ async function start() {
     }
 }
 start();
-
+console.log('init...');
 const app = express.Router();
 module.exports = app;
 
