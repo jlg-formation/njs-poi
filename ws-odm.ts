@@ -22,7 +22,7 @@ const app = express.Router();
 export const ws = app;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/now', function (req, res, next) {
     res.json({ date: new Date() });
@@ -85,6 +85,27 @@ app.patch('/user/:id', async function (req, res, next) {
         const user = req.body;
         await User.findByIdAndUpdate(id, user, {});
 
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
+
+app.delete('/user/:id', async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        await User.findByIdAndDelete(id);
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
+
+app.delete('/user', async function (req, res, next) {
+    try {
+        await User.remove({});
         res.status(204).end();
     } catch (error) {
         console.error('error: ', error);
