@@ -8,15 +8,15 @@ export function exposeCrud(app: Router, path: string, model: Model<any>) {
         try {
             let user: Document;
             console.log('req.body', req.body);
-            try {
-                user = new model(req.body);
-            } catch (error) {
-                return res.status(400).end();
-            }
+            user = new model(req.body);
             await user.save();
             res.status(201).json(user);
         } catch (error) {
-            res.status(500).end();
+            console.error('error: ', error);
+            if (error.errors && error.errors.code && error.errors.code.name === 'ValidatorError') {
+                return res.status(400).end();
+            }
+            res.status(500).json(error);
         }
     });
 
@@ -60,7 +60,7 @@ export function exposeCrud(app: Router, path: string, model: Model<any>) {
             const id = req.params.id;
             const user = req.body;
             await model.findByIdAndUpdate(id, user, {});
-    
+
             res.status(204).end();
         } catch (error) {
             console.error('error: ', error);

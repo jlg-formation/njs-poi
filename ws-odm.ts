@@ -4,7 +4,15 @@ import { exposeCrud } from './rest';
 
 const User = mongoose.model('user', new Schema({
     lastname: String,
-    firstname: String
+    firstname: String,
+}));
+
+const Formation = mongoose.model('formation', new Schema({
+    code: { type: String, required: true },
+    label: String,
+    duration: Number,
+    created: Date,
+    isPresentiel: Boolean
 }));
 
 async function start() {
@@ -27,3 +35,4 @@ app.get('/now', function (req, res) {
 });
 
 exposeCrud(app, '/user', User);
+exposeCrud(app, '/formation', Formation);
