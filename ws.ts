@@ -35,6 +35,33 @@ app.get('/user', async function (req, res, next) {
     res.json(users);
 });
 
+app.get('/user/:id', async function (req, res, next) {
+    if (!db) {
+        res.status(500).end();
+        return;
+    }
+    try {
+        const id = req.params.id;
+        let oid: ObjectID;
+        try {
+            oid = new ObjectID(id);
+        } catch (err) {
+            res.status(400).end();
+            return;
+        }
+        
+        const collection = db.collection('user');
+        const user = await collection.findOne({ "_id": oid });
+        if (!user) {
+            return res.status(404).end();
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
+
 app.post('/user', async function (req, res, next) {
     if (!db) {
         res.status(500).end();
