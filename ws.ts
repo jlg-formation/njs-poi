@@ -72,3 +72,41 @@ app.delete('/user/:id', async function (req, res, next) {
     }
 
 });
+
+app.put('/user/:id', async function (req, res, next) {
+    if (!db) {
+        res.status(500).end();
+        return;
+    }
+    try {
+        const id = req.params.id;
+        const user = req.body;
+
+        const collection = db.collection('user');
+        await collection.update({ "_id": new ObjectID(id) }, user);
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
+
+app.patch('/user/:id', async function (req, res, next) {
+    if (!db) {
+        res.status(500).end();
+        return;
+    }
+    try {
+        const id = req.params.id;
+        const user = req.body;
+
+        const collection = db.collection('user');
+        await collection.updateOne({ "_id": new ObjectID(id) }, { $set: user });
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
