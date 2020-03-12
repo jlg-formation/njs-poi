@@ -1,5 +1,5 @@
-const express = require('express');
-const mongodb = require('mongodb');
+import express from 'express';
+import mongodb from 'mongodb';
 
 let db;
 async function start() {
@@ -16,7 +16,7 @@ async function start() {
 start();
 console.log('init...');
 const app = express.Router();
-module.exports = app;
+export const ws = app;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -1,6 +1,6 @@
-const express = require('express');
-const serveIndex = require('serve-index');
-const ws = require('./ws');
+import express from 'express';
+import serveIndex from 'serve-index';
+import { ws } from './ws';
 const app = express();
 
 app.use(function (req, res, next) {
