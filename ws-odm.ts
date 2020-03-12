@@ -43,3 +43,25 @@ app.post('/user', async function (req, res, next) {
         res.status(500).end();
     }
 });
+
+app.get('/user', async function (req, res, next) {
+    try {
+        const result = await User.find();
+        res.json(result);
+    } catch (error) {
+        res.status(500).end();
+    }
+});
+
+app.get('/user/:id', async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        const result = await User.findById(id);
+        if (!result) {
+            return res.status(404).end();
+        }
+        res.json(result);
+    } catch (error) {
+        res.status(500).end();
+    }
+});
