@@ -1,6 +1,6 @@
 import express from 'express';
 import serveIndex from 'serve-index';
-import { ws } from './ws';
+import { ws } from './ws-odm';
 const app = express();
 
 app.use(function (req, res, next) {
