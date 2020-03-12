@@ -1,7 +1,7 @@
 import express from 'express';
 import mongodb from 'mongodb';
 
-let db;
+let db: mongodb.Db;
 async function start() {
     try {
         const client = await mongodb.connect('mongodb://localhost', { useUnifiedTopology: true });
