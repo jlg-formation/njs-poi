@@ -1,5 +1,5 @@
 import express from 'express';
-import mongodb from 'mongodb';
+import mongodb, { ObjectID } from 'mongodb';
 
 let db: mongodb.Db;
 async function start() {
@@ -47,6 +47,25 @@ app.post('/user', async function (req, res, next) {
         const collection = db.collection('user');
         const result = await collection.insertOne(user);
         res.status(201).json(result.ops[0]);
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+
+});
+
+
+app.delete('/user/:id', async function (req, res, next) {
+    if (!db) {
+        res.status(500).end();
+        return;
+    }
+    try {
+        const id = req.params.id;
+
+        const collection = db.collection('user');
+        await collection.deleteOne({ "_id": new ObjectID(id) });
+        res.status(204).end();
     } catch (error) {
         console.error('error: ', error);
         res.status(500).end();
