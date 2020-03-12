@@ -8,7 +8,7 @@ const User = mongoose.model('user', new Schema({
 
 async function start() {
     try {
-        const client = await mongoose.connect('mongodb://localhost:27017/orsys', { useNewUrlParser: true, useUnifiedTopology: true });
+        await mongoose.connect('mongodb://localhost:27017/orsys', { useNewUrlParser: true, useUnifiedTopology: true });
         console.log('connected.');
 
     } catch (error) {
@@ -62,6 +62,32 @@ app.get('/user/:id', async function (req, res, next) {
         }
         res.json(result);
     } catch (error) {
+        res.status(500).end();
+    }
+});
+
+app.put('/user/:id', async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        const user = await User.findById(id);
+        user.overwrite(req.body);
+        await user.save();
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
+        res.status(500).end();
+    }
+});
+
+app.patch('/user/:id', async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        const user = req.body;
+        await User.findByIdAndUpdate(id, user, {});
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('error: ', error);
         res.status(500).end();
     }
 });
